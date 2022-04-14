@@ -24,7 +24,20 @@
 
 declare(strict_types=1);
 
+const COLORS = [
+    'black',
+    'brown',
+    'red',
+    'orange',
+    'yellow',
+    'green',
+    'blue',
+    'violet',
+    'grey',
+    'white',
+];
+
 function colorCode(string $color): int
-{
-    throw new \BadFunctionCallException("Implement the colorCode function");
+{   
+    return array_search($color, COLORS);
 }
