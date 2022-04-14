@@ -26,35 +26,74 @@ declare(strict_types=1);
 
 class Robot
 {
-    /**
-     *
-     * @var int[]
-     */
-    protected $position;
+    const DIRECTION_NORTH = 'north';
+    const DIRECTION_SOUTH = 'source';
+    const DIRECTION_EAST  = 'east';
+    const DIRECTION_WEST  = 'west';
 
-    /**
-     *
-     * @var string
-     */
-    protected $direction;
-
-    public function __construct(array $position, string $direction)
-    {
-        throw new \BadMethodCallException("Implement the __construct method");
+    public function __construct(
+        public array  $position,
+        public string $direction
+    ) {
     }
 
     public function turnRight(): self
     {
-        throw new \BadMethodCallException("Implement the turnRight method");
+        $this->direction = match ($this->direction) {
+            Robot::DIRECTION_NORTH => Robot::DIRECTION_EAST,
+            Robot::DIRECTION_SOUTH => Robot::DIRECTION_WEST,
+            Robot::DIRECTION_EAST => Robot::DIRECTION_SOUTH,
+            Robot::DIRECTION_WEST => Robot::DIRECTION_NORTH,
+        };
+
+        return $this;
     }
 
     public function turnLeft(): self
     {
-        throw new \BadMethodCallException("Implement the turnLeft method");
+        $this->direction = match ($this->direction) {
+            Robot::DIRECTION_NORTH => Robot::DIRECTION_WEST,
+            Robot::DIRECTION_SOUTH => Robot::DIRECTION_EAST,
+            Robot::DIRECTION_EAST => Robot::DIRECTION_NORTH,
+            Robot::DIRECTION_WEST => Robot::DIRECTION_SOUTH,
+        };
+
+        return $this;
     }
 
     public function advance(): self
     {
-        throw new \BadMethodCallException("Implement the advance method");
+        [$x, $y] = $this->position;
+
+        $this->position = match ($this->direction) {
+            Robot::DIRECTION_NORTH => [$x, ++$y],
+            Robot::DIRECTION_SOUTH => [$x, --$y],
+            Robot::DIRECTION_EAST => [++$x, $y],
+            Robot::DIRECTION_WEST => [--$x, $y],
+        };
+
+        return $this;
+    }
+
+    public function instructions(string $instructions): self
+    {
+        foreach (str_split($instructions) as $instruction) {
+            switch ($instruction) {
+                case 'R':
+                    $this->turnRight();
+                    break;
+                case 'L':
+                    $this->turnLeft();
+                    break;
+                case 'A':
+                    $this->advance();
+                    break;
+                default:
+                    throw new \InvalidArgumentException("Invalid instruction: $instruction");
+                    break;
+            };
+        }
+
+        return $this;
     }
 }
