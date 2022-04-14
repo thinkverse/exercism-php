@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-function helloWorld()
+function helloWorld(): string
 {
-    return "Goodbye, Mars!";
+    return "Hello, World!";
 }
