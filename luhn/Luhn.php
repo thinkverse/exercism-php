@@ -26,5 +26,35 @@ declare(strict_types=1);
 
 function isValid(string $number): bool
 {
-    throw new \BadFunctionCallException("Implement the isValid function");
+    $digits = preg_replace('/\s+/', '', $number);
+
+    if (! is_numeric($digits)) {
+        return false;
+    }
+
+    $length = strlen($digits);
+
+    if ($length <= 1) {
+        return false;
+    }
+
+    $parity = ($length - 2) % 2;
+
+    $sum = 0;
+
+    for ($i = 0; $i < $length; $i++) {
+        $digit = $digits[$i];
+
+        if ($i % 2 === $parity) {
+            $digit *= 2;
+
+            if ($digit > 9) {
+                $digit -= 9;
+            }
+        }
+
+        $sum += $digit;
+    }
+
+    return $sum % 10 === 0;
 }
