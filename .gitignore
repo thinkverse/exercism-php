@@ -1,0 +1,7 @@
+*/**/.exercism
+*/**/HINTS.md
+*/**/HELP.md
+
+*/**/composer.json
+*/**/composer.lock
+*/**/vendor
