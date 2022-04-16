@@ -24,10 +24,42 @@
 
 declare(strict_types=1);
 
-class Series
+final class Series
 {
+    protected int $length;
+
+    protected array $series;
+
+    public function __construct(string $series,) 
+    {
+        if (strlen($series) > 0 && ! is_numeric($series)) {
+            throw new \InvalidArgumentException("Cannot create a Series with a non-numeric argument.");
+        }
+
+        $this->series = str_split($series);
+        $this->length = strlen($series);
+    }
+
     public function largestProduct(int $span): int
     {
-        throw new \BadMethodCallException("Implement the largestProduct method");
+        if ($span > $this->length) {
+            throw new \InvalidArgumentException("Cannot find product of a span longer than the series.");
+        }
+
+        if ($span < 0) {
+            throw new \InvalidArgumentException("Cannot find product of a negative span.");
+        }
+
+        $product = 0;
+
+        for ($i = 0; $i < ($this->length - $span + 1); $i++) { 
+            $p = array_product(array_slice($this->series, $i, $span));
+    
+            if ($p > $product) {
+                $product = $p;
+            }
+        }
+
+        return $product;
     }
 }
